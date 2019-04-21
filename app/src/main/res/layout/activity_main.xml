@@ -6,32 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <nysa.nysa_20.model.Toolbar_MainActivity
-        android:id="@+id/toolbarMainActivity"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#FFFFFF"
-        android:gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/accountSettingsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/account_settings"
+        android:textColor="#2DA586"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/qrGeneratorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="QR GENERATOR"
+        android:gravity="center"
+        android:textColor="#2DA586"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    </nysa.nysa_20.model.Toolbar_MainActivity>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/trackPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
-        app:layout_constraintBottom_toBottomOf="parent"
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mainRecycleView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.749">
-
-    </android.support.v4.view.ViewPager>
-
+        app:layout_constraintTop_toBottomOf="@+id/accountSettingsTextView" />
 </android.support.constraint.ConstraintLayout>

@@ -16,16 +16,6 @@ public class Account implements Serializable {
     private Doctor doctor;
 
 
-    public Account(RegistrationFormular formular){
-        this.lastName = formular.getLastName();
-        this.firstName = formular.getFirstName();
-        this.username = formular.getUsername();
-        this.email = formular.getEmail();
-        historyMap = new HashMap<>();
-
-
-    }
-
     public Account(){
 
     }
@@ -64,6 +54,30 @@ public class Account implements Serializable {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setHistoryMap(HashMap<LocalDate, SymptomEntry> historyMap) {
+        this.historyMap = historyMap;
     }
 
     @Override

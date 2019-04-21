@@ -1,26 +1,21 @@
 package nysa.nysa_20.activity;
 
-import android.location.LocationManager;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import nysa.nysa_20.R;
-import nysa.nysa_20.model.LocationDataKeeper;
-import nysa.nysa_20.model.Toolbar_MainActivity;
-import nysa.nysa_20.model.adaptors.MainActivityPagerAdaptor;
-import nysa.nysa_20.service.connectivity.LocationService;
+import nysa.nysa_20.model.adaptors.PatientsRecyclerView;
+import nysa.nysa_20.service.QRService.QRGenerator;
 
 public class MainActivity extends AppCompatActivity {
-    private static ViewPager trackPager;
-    private static MainActivityPagerAdaptor trackAdapter;
-    private static Toolbar_MainActivity toolbar_mainActivity;
+    private static TextView qrGeneratorTextView;
+    private static TextView accountSettingsTextView;
+    private static RecyclerView recyclerView;
+    private static PatientsRecyclerView adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,51 +25,46 @@ public class MainActivity extends AppCompatActivity {
 
         initComponents();
 
-        LocationService service = new LocationService(MainActivity.this);
-
-
-
-
-
     }
 
-    private   void initComponents(){
-        trackAdapter = new MainActivityPagerAdaptor(getSupportFragmentManager());
-        trackPager = findViewById(R.id.trackPager);
-        toolbar_mainActivity = findViewById(R.id.toolbarMainActivity);
-
-        trackPager.setAdapter(trackAdapter);
-
-        prepareViewPager();
-
-
+    private void initComponents(){
+        initComponentReferences();
+        initComponentFunctionalities();
     }
 
-    private void prepareViewPager() {
-        trackPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    private void initComponentFunctionalities() {
+        qrGeneratorTextView.setOnClickListener(ev -> qrGeneratorTextViewClicked());
+        accountSettingsTextView.setOnClickListener(ev -> accountSettingsTextViewClicked());
+        setupRecycleView();
+    }
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                toolbar_mainActivity.updateToolbarImageResources(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+    private void accountSettingsTextViewClicked() {
+        Intent toAccountSettings = new Intent(this,AccountSettingsActivity.class);
+        startActivity(toAccountSettings);
     }
 
 
-    public static void setCurrentTab(int position){
-        trackPager.setCurrentItem(position);
-        toolbar_mainActivity.updateToolbarImageResources(position);
-
+    private void qrGeneratorTextViewClicked() {
+        Intent toQRGenerator = new Intent(this, QRGenerator.class);
+        startActivity(toQRGenerator);
     }
+
+    private void initComponentReferences() {
+        qrGeneratorTextView = findViewById(R.id.qrGeneratorTextView);
+        accountSettingsTextView = findViewById(R.id.accountSettingsTextView);
+        recyclerView = findViewById(R.id.mainRecycleView);
+        adapter = new PatientsRecyclerView(this);
+    }
+
+
+
+    private void setupRecycleView() {
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
+
+
 
 
 }

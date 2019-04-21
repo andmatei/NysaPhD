@@ -3,8 +3,6 @@ package nysa.nysa_20.service.QRService;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
@@ -14,6 +12,8 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import nysa.nysa_20.R;
+import nysa.nysa_20.model.AccountHolder;
+import nysa.nysa_20.model.DoctorAccount;
 
 public class QRGenerator extends AppCompatActivity {
     private static ImageView qrImage;
@@ -21,15 +21,18 @@ public class QRGenerator extends AppCompatActivity {
     private static MultiFormatWriter formatWriter;
     private static BarcodeEncoder encoder;
     private static Bitmap bitmap;
-
+    private static DoctorAccount account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qrgenerator);
+        setContentView(R.layout.qr_generator);
 
         formatWriter = new MultiFormatWriter();
         qrImage = findViewById(R.id.qrImage);
-        String qrValue = "NysaAllegyApp";
+        account = AccountHolder.getAccount();
+
+
+        String qrValue = "NysaId"+account.getId()+"Name"+account.getFirstName()+" "+account.getLastName()+"Phone"+account.getPhone()+"Email"+account.getEmail();
 
         try {
             bitmatrix = formatWriter.encode(qrValue, BarcodeFormat.QR_CODE,300,300);

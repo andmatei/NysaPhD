@@ -23,8 +23,7 @@ public class SymptomEntryService {
     private SymptomEntryService() {
     }
 
-    public static boolean isTodayLastEntry() {
-        Account account = AccountHolder.getAccount();
+    public static boolean isTodayLastEntry(Account account) {
         HashMap<java.time.LocalDate, SymptomEntry> map = account.getHistoryMap();
         if (map.containsKey(java.time.LocalDate.now()))
             return true;
@@ -64,8 +63,7 @@ public class SymptomEntryService {
         return score;
     }
 
-    public static int getScore(LocalDate date) {
-        Account account = AccountHolder.getAccount();
+    public static int getScore(LocalDate date,Account account) {
         HashMap<java.time.LocalDate, SymptomEntry> map = account.getHistoryMap();
 
         int score = 0;
@@ -95,11 +93,10 @@ public class SymptomEntryService {
         return score;
     }
 
-    public static SymptomEntry getTodaySymptomEntry() {
-        Account account = AccountHolder.getAccount();
+    public static SymptomEntry getTodaySymptomEntry(Account account) {
         HashMap<java.time.LocalDate, SymptomEntry> map = account.getHistoryMap();
 
-        if (isTodayLastEntry()) {
+        if (isTodayLastEntry(account)) {
             return map.get(java.time.LocalDate.now());
         }
         return null;
@@ -197,14 +194,14 @@ public class SymptomEntryService {
         return rez.toString();
     }
 
-    public static int[] getSymptomsCountInAPeriod(LocalDate beginLocalDate, LocalDate endLocalDate) {
+    public static int[] getSymptomsCountInAPeriod(LocalDate beginLocalDate, LocalDate endLocalDate,Account account) {
         int sightSymptomsCount = 0;
         int respiratorySymptomsCount = 0;
         int painSymptomsCount = 0;
         int skinSymptomsCount = 0;
 
 
-        HashMap<LocalDate, SymptomEntry> map = AccountHolder.getAccount().getHistoryMap();
+        HashMap<LocalDate, SymptomEntry> map = account.getHistoryMap();
         LocalDate currentDate = beginLocalDate;
 
         while (isLocalDate1BeforeLocalDate2(currentDate,endLocalDate)) {

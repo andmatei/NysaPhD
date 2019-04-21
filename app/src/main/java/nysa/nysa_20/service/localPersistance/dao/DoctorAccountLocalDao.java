@@ -13,12 +13,14 @@ import java.util.Optional;
 
 import nysa.nysa_20.model.Account;
 import nysa.nysa_20.model.AccountHolder;
+import nysa.nysa_20.model.Doctor;
+import nysa.nysa_20.model.DoctorAccount;
 
-public class AccountLocalDao {
+public class DoctorAccountLocalDao {
     private File file;
 
 
-    public AccountLocalDao(File file) {
+    public DoctorAccountLocalDao(File file) {
         this.file = file;
     }
 
@@ -34,7 +36,7 @@ public class AccountLocalDao {
     }
 
     public void persistCurrentAccount() throws IOException {
-        Account curentAccount = AccountHolder.getAccount();
+        DoctorAccount curentAccount = AccountHolder.getAccount();
         try(FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         ){
@@ -61,7 +63,7 @@ public class AccountLocalDao {
        try(FileInputStream fileInputStream = new FileInputStream(file);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)
        ){
-           Account account = (Account) objectInputStream.readObject();
+           DoctorAccount account = (DoctorAccount) objectInputStream.readObject();
            AccountHolder.setAccount(account);
 
        }

@@ -18,6 +18,10 @@ public class SymptomEntry implements Serializable {
     private List<Symptom> symptomsSkinEntry;
 
     public SymptomEntry() {
+        symptomsSightEntry = new ArrayList<>();
+        symptomsRespirationEntry = new ArrayList<>();
+        symptomsSkinEntry = new ArrayList<>();
+        symptomsPainEntry = new ArrayList<>();
     }
 
     public List<Symptom> getSymptomsSightEntry() {

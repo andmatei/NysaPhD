@@ -16,14 +16,11 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".service.QRService.QRGenerator"></activity>
-        <activity android:name=".activity.ManagementDoctorsActivity" />
-        <activity android:name=".service.QRService.QRReader" />
-        <activity android:name=".activity.SymptomEntryActivity" />
+        <activity android:name=".activity.PersonalFileActivity"></activity>
+        <activity android:name=".service.QRService.QRGenerator" />
         <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.ChatBotActivity" />
-        <activity android:name=".activity.AllergyRegisterActivity" />
         <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.AccountSettingsActivity" />
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait">

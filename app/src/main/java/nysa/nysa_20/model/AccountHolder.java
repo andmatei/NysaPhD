@@ -4,7 +4,7 @@ import nysa.nysa_20.service.localPersistance.MainLocalPersistenceService;
 
 public class AccountHolder {
 
-    Account account;
+    private static DoctorAccount account;
     private static boolean  isEmpty = true;
 
     private AccountHolder(){
@@ -18,13 +18,13 @@ public class AccountHolder {
         return SingletonHolder.SINGLETON;
     }
 
-    public static void setAccount(Account account){
+    public static void setAccount(DoctorAccount account){
         SingletonHolder.SINGLETON.account = account;
         AccountHolder.isEmpty = false;
 
     }
 
-    public static Account getAccount(){
+    public static DoctorAccount getAccount(){
         return SingletonHolder.SINGLETON.account;
     }
 
@@ -38,11 +38,11 @@ public class AccountHolder {
     }
 
     public static void initiatePersistance(){
-        isEmpty = true;
+
     }
 
     public static void finishedPersistance(){
-        isEmpty = false;
+
     }
 
 }

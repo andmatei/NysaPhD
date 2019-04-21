@@ -1,16 +1,14 @@
-package nysa.nysa_20.model.main_activity_fragments;
+package nysa.nysa_20.activity;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -27,27 +25,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import nysa.nysa_20.R;
-import nysa.nysa_20.activity.MainActivity;
+import nysa.nysa_20.model.Account;
 import nysa.nysa_20.model.AccountHolder;
+import nysa.nysa_20.model.DoctorAccount;
 import nysa.nysa_20.model.SymptomEntry;
-import nysa.nysa_20.model.symptom_entry_activity_fragments.FragmentSkinSymptoms;
 import nysa.nysa_20.service.utilitary.SymptomEntryService;
 import nysa.nysa_20.service.utilitary.TimeUtilitaryClass;
 
-public class FragmentSymptomTrack extends Fragment {
-    public FragmentSymptomTrack() {
-    }
-
-    private static View view;
+public class PersonalFileActivity extends AppCompatActivity {
     private static CompactCalendarView calendarView;
     private static TextView monthTextView;
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM - YYYY");
-    private static Map<LocalDate, SymptomEntry> map = AccountHolder.getAccount().getHistoryMap();
     private static TextView discomfortLevelTextView;
     private static TextView eyesightTextView;
     private static TextView respirationTextView;
@@ -69,20 +61,36 @@ public class FragmentSymptomTrack extends Fragment {
     private static TextView respirationValueLegendTextView;
     private static TextView painValueLegendTextView;
     private static TextView skinValueLegendTextView;
-
+    private static TextView namePatientTextView;
+    private static TextView emailPatientTextView;
+    private static TextView allergiesTextView;
+    private static DoctorAccount account;
+    private static HashMap<LocalDate,SymptomEntry> map;
+    private static Context context;
+    private static Account patientAccount;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_symptom_track, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_personal_file);
+        context = this;
+
+        prepareInitComponents();
 
         initComponents();
         setupPieChart();
 
+    }
 
-        return view;
+    private void prepareInitComponents(){
+        Intent i = this.getIntent();
+        int pos = (Integer) i.getExtras().get("PatientPosition");
+        account = AccountHolder.getAccount();
+        patientAccount = account.getPatients().get(pos);
+        map = patientAccount.getHistoryMap();
 
     }
+
 
     private void initComponents() {
 
@@ -101,6 +109,23 @@ public class FragmentSymptomTrack extends Fragment {
         endPeriod.setText(TimeUtilitaryClass.getLocalDateToStringFormatSymptomTrack(LocalDate.now()));
         beginPeriodLocalDate = LocalDate.now();
         endPeriodLocalDate = LocalDate.now();
+        namePatientTextView.setText(patientAccount.getFirstName()+" "+patientAccount.getLastName());
+        emailPatientTextView.setText(patientAccount.getEmail());
+        allergiesTextView.setText(getPatientAllergies());
+
+    }
+
+    private String getPatientAllergies() {
+        StringBuilder sb = new StringBuilder("");
+        HashMap<String,Boolean> allergyMap = patientAccount.getAllergyMap();
+        for(Map.Entry<String,Boolean> e :allergyMap.entrySet()){
+            if(e.getValue()){
+                sb.append(e.getKey()+" ");
+            }
+        }
+
+
+        return sb.toString();
     }
 
     private void onEndPeriodChange(View ev) {
@@ -117,27 +142,32 @@ public class FragmentSymptomTrack extends Fragment {
 
 
     private void initComponentsReferences() {
-        calendarView = view.findViewById(R.id.calendarView_DialogBox);
-        monthTextView = view.findViewById(R.id.monthTextView);
-        discomfortLevelTextView = view.findViewById(R.id.discomfortLevelSelectedTextView);
-        eyesightTextView = view.findViewById(R.id.eyesightSymptomsTextView_Tracker);
-        respirationTextView = view.findViewById(R.id.respirationSymptomsTextView_Tracker);
-        painTextView = view.findViewById(R.id.painSymptomsTextView_Tracker);
-        skinTextView = view.findViewById(R.id.skinSymptomsTextView_Tracker);
-        selectedDataLayout = view.findViewById(R.id.selectedDate_data);
-        eyesightDeclarationTextView = view.findViewById(R.id.eyesightDeclarationTextView_Tracker);
-        respirationDeclarationTextView = view.findViewById(R.id.respirationDeclarationTextView_Tracker);
-        painDeclarationTextView = view.findViewById(R.id.painDeclarationTextView_Tracker);
-        skinDeclarationTextView = view.findViewById(R.id.skinDeclarationTextView_Tracker);
-        beginPeriodStatement = view.findViewById(R.id.beginPeriodStatementTextView_Tracker);
-        beginPeriod = view.findViewById(R.id.beginPeriodTextView_Tracker);
-        endPeriodStatement = view.findViewById(R.id.endPeriodStatementTextView_Tracker);
-        endPeriod = view.findViewById(R.id.endPeriodTextView_Tracker);
-        chart = view.findViewById(R.id.chart);
-        eyesightValueLegendTextView = view.findViewById(R.id.eyesightValueLegendTextView);
-        respirationValueLegendTextView = view.findViewById(R.id.respirationValueLegendTextView);
-        painValueLegendTextView = view.findViewById(R.id.painValueLegendTextView);
-        skinValueLegendTextView = view.findViewById(R.id.skinValueLegendTextView);
+        calendarView = findViewById(R.id.calendarView_DialogBox);
+        monthTextView = findViewById(R.id.monthTextView);
+        discomfortLevelTextView = findViewById(R.id.discomfortLevelSelectedTextView);
+        eyesightTextView = findViewById(R.id.eyesightSymptomsTextView_Tracker);
+        respirationTextView = findViewById(R.id.respirationSymptomsTextView_Tracker);
+        painTextView = findViewById(R.id.painSymptomsTextView_Tracker);
+        skinTextView = findViewById(R.id.skinSymptomsTextView_Tracker);
+        selectedDataLayout = findViewById(R.id.selectedDate_data);
+        eyesightDeclarationTextView = findViewById(R.id.eyesightDeclarationTextView_Tracker);
+        respirationDeclarationTextView = findViewById(R.id.respirationDeclarationTextView_Tracker);
+        painDeclarationTextView = findViewById(R.id.painDeclarationTextView_Tracker);
+        skinDeclarationTextView = findViewById(R.id.skinDeclarationTextView_Tracker);
+        beginPeriodStatement = findViewById(R.id.beginPeriodStatementTextView_Tracker);
+        beginPeriod = findViewById(R.id.beginPeriodTextView_Tracker);
+        endPeriodStatement = findViewById(R.id.endPeriodStatementTextView_Tracker);
+        endPeriod = findViewById(R.id.endPeriodTextView_Tracker);
+        chart = findViewById(R.id.chart);
+        eyesightValueLegendTextView = findViewById(R.id.eyesightValueLegendTextView);
+        respirationValueLegendTextView = findViewById(R.id.respirationValueLegendTextView);
+        painValueLegendTextView = findViewById(R.id.painValueLegendTextView);
+        skinValueLegendTextView = findViewById(R.id.skinValueLegendTextView);
+        namePatientTextView = findViewById(R.id.namePatientTextViewPersonalFile);
+        emailPatientTextView = findViewById(R.id.emailPatientTextViewPersonalFile);
+        allergiesTextView = findViewById(R.id.allergiesValuesTextView);
+
+
     }
 
     private void prepareCalendar() {
@@ -149,7 +179,7 @@ public class FragmentSymptomTrack extends Fragment {
 
         for (Map.Entry<LocalDate, SymptomEntry> entry : map.entrySet()) {
             long epochDay = entry.getKey().toEpochDay() * 86400000;
-            int scoreDay = SymptomEntryService.getScore(entry.getKey());
+            int scoreDay = SymptomEntryService.getScore(entry.getKey(),patientAccount);
             Event event = new Event(Color.RED, epochDay, scoreDay);
             calendarView.addEvent(event);
 
@@ -253,7 +283,7 @@ public class FragmentSymptomTrack extends Fragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog dialog = new DatePickerDialog(view.getContext(),android.R.style.Theme_Holo_Light_Dialog_MinWidth,listener,year,month,day);
+        DatePickerDialog dialog = new DatePickerDialog(context,android.R.style.Theme_Holo_Light_Dialog_MinWidth,listener,year,month,day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
@@ -309,7 +339,7 @@ public class FragmentSymptomTrack extends Fragment {
         //pain - 2 - yellow #f5c700
         //skin 3 - green #6a961f
 
-        int[] values = SymptomEntryService.getSymptomsCountInAPeriod(beginPeriodLocalDate,endPeriodLocalDate);
+        int[] values = SymptomEntryService.getSymptomsCountInAPeriod(beginPeriodLocalDate,endPeriodLocalDate,patientAccount);
         int sum = values[0]+values[1]+values[2]+values[3];
         if(sum == 0){
             for(int i = 0;i<=3;i++){

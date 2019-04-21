@@ -7,7 +7,7 @@ public class RegistrationFormular {
     private RegistrationFormular(){}
     private String lastName;
     private String firstName;
-    private String username;
+    private String phone;
     private String email;
     private String password;
     private boolean isAnyEmpty;
@@ -17,7 +17,7 @@ public class RegistrationFormular {
 
         private String lastName;
         private String firstName;
-        private String username;
+        private String phone;
         private String email;
         private String password;
 
@@ -31,8 +31,8 @@ public class RegistrationFormular {
             return  this;
         }
 
-        public Builder setUsername(String username){
-            this.username = username;
+        public Builder setUsername(String phone){
+            this.phone = phone;
             return this;
         }
 
@@ -51,7 +51,7 @@ public class RegistrationFormular {
 
             formular.firstName = this.firstName;
             formular.lastName = this.lastName;
-            formular.username = this.username;
+            formular.phone = this.phone;
             formular.email = this.email;
             formular.password = this.password;
             formular.isAnyEmpty = checkIsAnyEmpty();
@@ -67,7 +67,7 @@ public class RegistrationFormular {
             else
                 if(lastName.equals("")) result = true;
                 else
-                    if(username.equals("")) result  = true;
+                    if(phone.equals("")) result  = true;
                     else
                         if(email.equals("")) result = true;
                         else
@@ -86,8 +86,8 @@ public class RegistrationFormular {
         return firstName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPhone() {
+        return phone;
     }
 
     public String getEmail() {
@@ -107,7 +107,7 @@ public class RegistrationFormular {
         return "RegistrationFormular{" +
                 "lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", isAnyEmpty=" + isAnyEmpty +

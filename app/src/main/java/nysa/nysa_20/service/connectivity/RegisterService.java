@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 
 import nysa.nysa_20.model.APIResponse;
 import nysa.nysa_20.model.AccountHolder;
+import nysa.nysa_20.model.Doctor;
+import nysa.nysa_20.model.DoctorAccount;
 import nysa.nysa_20.model.RegistrationFormular;
 import nysa.nysa_20.model.Account;
 import nysa.nysa_20.service.localPersistance.MainLocalPersistenceService;
@@ -45,7 +47,7 @@ public class RegisterService implements Callable {
     }
 
     public static void finaliseRegisterSequence(){
-        Account account = AccountHolder.getAccount();
+        DoctorAccount account = AccountHolder.getAccount();
         MainLocalPersistenceService.persistCurrentAccount();
 
 
@@ -70,7 +72,7 @@ public class RegisterService implements Callable {
 
         initializeRetrofit();
         Call<APIResponse> call = retrofitService.register(
-                formular.getUsername(),
+                formular.getPhone(),
                 formular.getEmail(),
                 formular.getPassword(),
                 formular.getFirstName(),
